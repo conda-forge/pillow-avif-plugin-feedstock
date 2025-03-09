@@ -1,16 +1,16 @@
 {% set name = "pillow-avif-plugin" %}
-{% set version = "1.4.6" %}
+{% set version = "1.5.0" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/pillow-avif-plugin-{{ version }}.tar.gz
-  sha256: 855cf50d03f6fc16e1fd5e364b3cea0b79f4bf90d39ff2123969735d851e08ba
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name | replace('-', '_') }}-{{ version }}.tar.gz
+  sha256: 66ddb846bd41924a0415cdb92d57cc56fb5187b321fcce82d6f5a36c2ba192ef
 
 build:
-  number: 1
+  number: 0
   script: {{ PYTHON }} -m pip install . -vv
 
 requirements:
