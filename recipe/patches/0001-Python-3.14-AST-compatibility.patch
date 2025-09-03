@@ -1,0 +1,56 @@
+From afb492e45ca4c06e63b11f7c57aa8c7b9f956291 Mon Sep 17 00:00:00 2001
+From: Jeongseok Lee <jeongseok@meta.com>
+Date: Wed, 3 Sep 2025 08:45:24 -0700
+Subject: [PATCH] Python 3.14 AST compatibility
+
+---
+ setup.py | 26 +++++++++++++++++++-------
+ 1 file changed, 19 insertions(+), 7 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 0c27983..c100988 100644
+--- a/setup.py
++++ b/setup.py
+@@ -1,20 +1,32 @@
+ import ast
+ from io import open
++import io
+ import os
+ import sys
+ 
+ from setuptools import Extension, setup
++from typing import Optional
++
++
++def _const_str(node: ast.AST) -> Optional[str]:
++    # Support both legacy ast.Str.s and Python 3.14+ ast.Constant.value
++    s = getattr(node, "s", None)
++    if s is not None:
++        return s
++    if isinstance(node, ast.Constant) and isinstance(node.value, str):
++        return node.value
++    return None
+ 
+ 
+ def version():
+-    filename = "src/pillow_avif/__init__.py"
+-    with open(filename) as f:
+-        tree = ast.parse(f.read(), filename)
++    with io.open(os.path.join("src", "pillow_avif", "__init__.py"), "r", encoding="utf-8") as f:
++        tree = ast.parse(f.read())
+     for node in tree.body:
+-        if isinstance(node, ast.Assign) and len(node.targets) == 1:
+-            (target,) = node.targets
+-            if isinstance(target, ast.Name) and target.id == "__version__":
+-                return node.value.s
++        if isinstance(node, ast.Assign) and getattr(node.targets[0], "id", "") == "__version__":
++            v = _const_str(node.value)
++            if v is None:
++                raise RuntimeError("Could not extract __version__ from src/pillow_avif/__init__.py")
++            return v
+ 
+ 
+ def readme():
+-- 
+2.44.0.windows.1
+
