@@ -1,5 +1,5 @@
 {% set name = "pillow-avif-plugin" %}
-{% set version = "1.5.2" %}
+{% set version = "1.5.5" %}
 
 package:
   name: {{ name|lower }}
@@ -7,12 +7,10 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name | replace('-', '_') }}-{{ version }}.tar.gz
-  sha256: 811e0dc8be1e44393d2e3865ec330a8a8a1194b94eb8cfca6fa778e3f476d649
-  patches:
-    - patches/0001-Python-3.14-AST-compatibility.patch  # [py>=314]
+  sha256: e97956a62fc4f252e2a54644312839e194ec09b693f2f7b4d28c44cd747baf9d
 
 build:
-  number: 1
+  number: 0
   script: {{ PYTHON }} -m pip install . -vv
 
 requirements:
