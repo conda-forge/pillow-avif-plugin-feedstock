@@ -10,7 +10,7 @@ source:
   sha256: e97956a62fc4f252e2a54644312839e194ec09b693f2f7b4d28c44cd747baf9d
 
 build:
-  number: 0
+  number: 1
   script: {{ PYTHON }} -m pip install . -vv
 
 requirements:
@@ -32,9 +32,12 @@ test:
   imports:
     - pillow_avif
   commands:
+    - python run_test.py
     - pip check
   requires:
     - pip
+  files:
+    - run_test.py
 
 about:
   home: https://github.com/fdintino/pillow-avif-plugin/
