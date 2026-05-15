@@ -1,0 +1,63 @@
+schema_version: 1
+
+context:
+  name: pillow-avif-plugin
+  source_name: pillow_avif_plugin
+  version: "1.5.5"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/${{ source_name }}-${{ version }}.tar.gz
+  sha256: e97956a62fc4f252e2a54644312839e194ec09b693f2f7b4d28c44cd747baf9d
+
+build:
+  number: 2
+  script: python -m pip install . -vv --no-deps --no-build-isolation
+
+requirements:
+  build:
+    - ${{ compiler("c") }}
+    - ${{ stdlib("c") }}
+    - if: build_platform != target_platform
+      then:
+        - cross-python_${{ target_platform }}
+        - pip
+        - python
+        - setuptools
+  host:
+    - libavif
+    - pip
+    - python
+    - setuptools
+  run:
+    - pillow
+    - python
+
+tests:
+  - python:
+      imports:
+        - pillow_avif
+  - script:
+      - pip check
+      - python run_test.py
+    files:
+      recipe:
+        - run_test.py
+    requirements:
+      run:
+        - pip
+        - python
+
+about:
+  homepage: https://github.com/fdintino/pillow-avif-plugin/
+  repository: https://github.com/fdintino/pillow-avif-plugin/
+  summary: A pillow plugin that adds avif support via libavif
+  license: BSD-2-Clause
+  license_file: LICENSE
+
+extra:
+  recipe-maintainers:
+    - jeongseok-meta
