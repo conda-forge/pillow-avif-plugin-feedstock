@@ -3,7 +3,7 @@ schema_version: 1
 context:
   name: pillow-avif-plugin
   source_name: pillow_avif_plugin
-  version: "1.5.5"
+  version: "1.6.0"
 
 package:
   name: ${{ name|lower }}
@@ -11,10 +11,10 @@ package:
 
 source:
   url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/${{ source_name }}-${{ version }}.tar.gz
-  sha256: e97956a62fc4f252e2a54644312839e194ec09b693f2f7b4d28c44cd747baf9d
+  sha256: 2cd412b955da5f15f951ae0aec371cec52e27f141693423e185b9af5ac3879b5
 
 build:
-  number: 2
+  number: 0
   script: python -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
